@@ -2,7 +2,7 @@
 title: Introduction to Computer Science
 description: High-level view of what this curriculum covers.
 category: Fundamentals
-order: 1
+order: 5
 ---
 
 # Introduction

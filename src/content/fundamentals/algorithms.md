@@ -2,7 +2,7 @@
 title: Algorithms Basics
 description: Placeholder page for algorithm fundamentals.
 category: Fundamentals
-order: 2
+order: 6
 ---
 
 # Algorithms Basics
