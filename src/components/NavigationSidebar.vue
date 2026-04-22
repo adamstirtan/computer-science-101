@@ -8,9 +8,6 @@ defineProps<{
 
 <template>
   <aside class="sidebar">
-    <h1>Computer Science 101</h1>
-    <p class="subtitle">A markdown-powered curriculum shell</p>
-
     <section
       v-for="category in categories"
       :key="category.name"
