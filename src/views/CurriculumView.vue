@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 const sidebarOpen = ref(true);
 import { useRoute, useRouter } from "vue-router";
@@ -16,7 +16,7 @@ import { useXp } from "../composables/useXp";
 const route = useRoute();
 const router = useRouter();
 const curriculum = useCurriculum();
-const { user, signOut } = useAuth();
+const { user, loading, signOut } = useAuth();
 const { completedSlugs, markComplete } = useProgress();
 const { totalXp, awardXp, recordAnswers } = useXp();
 
@@ -72,14 +72,18 @@ async function updateRenderedHtml(): Promise<void> {
   renderedHtml.value = await renderMarkdown(activePage.value.markdown);
 }
 
-onMounted(() => {
-  if (!activeSlug.value && curriculum.firstSlug) {
-    router.replace({
-      name: "curriculum",
-      params: { slug: curriculum.firstSlug },
-    });
-  }
-});
+watch(
+  [activeSlug, loading],
+  ([currentSlug, authLoading]) => {
+    if (!currentSlug && curriculum.firstSlug && !authLoading) {
+      router.replace({
+        name: "curriculum",
+        params: { slug: curriculum.firstSlug },
+      });
+    }
+  },
+  { immediate: true },
+);
 
 watch(
   activePage,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../composables/useAuth";
 import { useCurriculum } from "../composables/useCurriculum";
@@ -7,15 +7,16 @@ import { useProgress } from "../composables/useProgress";
 import { useXp } from "../composables/useXp";
 
 const router = useRouter();
-const { user, signOut } = useAuth();
+const { user, loading, signOut } = useAuth();
 const { totalXp } = useXp();
 const { completedSlugs } = useProgress();
 const curriculum = useCurriculum();
 
-// Redirect to login if not authenticated
-if (!user.value) {
-  void router.replace("/login");
-}
+watchEffect(() => {
+  if (!loading.value && !user.value) {
+    void router.replace("/login");
+  }
+});
 
 const displayName = computed(
   () =>
@@ -180,9 +181,17 @@ async function handleSignOut(): Promise<void> {
       </button>
     </div>
   </div>
+  <div v-else-if="loading" class="profile-loading">Loading profile…</div>
 </template>
 
 <style scoped>
+.profile-loading {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  color: var(--muted, #858585);
+}
+
 .profile-page {
   max-width: 720px;
   margin: 0 auto;
