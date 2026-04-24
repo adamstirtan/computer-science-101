@@ -1,6 +1,11 @@
 <script setup lang="ts">
-defineProps<{ sidebarOpen: boolean }>();
-const emit = defineEmits<{ toggle: [] }>();
+import type { User } from "@supabase/supabase-js";
+import { useRouter } from "vue-router";
+
+defineProps<{ sidebarOpen: boolean; user: User | null; totalXp: number }>();
+const emit = defineEmits<{ toggle: []; signOut: [] }>();
+
+const router = useRouter();
 </script>
 
 <template>
@@ -27,6 +32,68 @@ const emit = defineEmits<{ toggle: [] }>();
       </button>
       <span class="app-bar-title">Computer Science 101</span>
     </div>
-    <button class="app-bar-login" type="button">Log in</button>
+
+    <div class="app-bar-right">
+      <template v-if="user">
+        <img
+          v-if="user.user_metadata?.avatar_url"
+          class="app-bar-avatar"
+          :src="user.user_metadata.avatar_url"
+          :alt="user.user_metadata?.user_name ?? 'User avatar'"
+          width="28"
+          height="28"
+          referrerpolicy="no-referrer"
+        />
+        <span class="app-bar-username">{{
+          user.user_metadata?.user_name ?? user.email
+        }}</span>
+        <span class="app-bar-xp" title="Total XP earned">{{ totalXp }} XP</span>
+        <button class="app-bar-login" type="button" @click="emit('signOut')">
+          Log out
+        </button>
+      </template>
+      <template v-else>
+        <button
+          class="app-bar-login"
+          type="button"
+          @click="router.push('/login')"
+        >
+          Log in
+        </button>
+      </template>
+    </div>
   </header>
 </template>
+
+<style scoped>
+.app-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.app-bar-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.app-bar-username {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #888);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-bar-xp {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, #facc15 15%, transparent);
+  color: #facc15;
+  white-space: nowrap;
+}
+</style>

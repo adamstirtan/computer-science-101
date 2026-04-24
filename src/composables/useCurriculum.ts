@@ -73,6 +73,8 @@ function normalizePage(path: string, fileContents: string): CurriculumPage {
     order,
     sourcePath: path,
     markdown: parsed.content,
+    xp: Number.isFinite(frontmatter.xp) ? Number(frontmatter.xp) : 0,
+    questions: frontmatter.questions ?? [],
   };
 }
 

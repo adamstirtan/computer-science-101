@@ -4,7 +4,11 @@ import type { CurriculumPage } from "../types/curriculum";
 defineProps<{
   page: CurriculumPage | null;
   html: string;
+  isLoggedIn: boolean;
+  isCompleted: boolean;
 }>();
+
+const emit = defineEmits<{ markComplete: []; openQuiz: [] }>();
 
 async function writeToClipboard(text: string): Promise<void> {
   if (navigator.clipboard && window.isSecureContext) {
@@ -79,6 +83,69 @@ async function handleArticleClick(event: Event): Promise<void> {
     <h1>{{ page.title }}</h1>
     <p class="description">{{ page.description }}</p>
     <article class="markdown" v-html="html" @click="handleArticleClick" />
+
+    <div class="completion-bar">
+      <span v-if="isCompleted" class="completion-badge">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M2 7l3.5 3.5L12 4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Completed
+        <span v-if="page && page.xp > 0" class="completion-xp"
+          >+{{ page.xp }} XP</span
+        >
+      </span>
+      <template v-else-if="isLoggedIn">
+        <button
+          v-if="page && page.questions.length > 0"
+          class="completion-btn completion-btn--quiz"
+          type="button"
+          @click="emit('openQuiz')"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="7"
+              cy="7"
+              r="6"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M7 4v4M7 9.5v.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          Take quiz · +{{ page?.xp ?? 0 }} XP
+        </button>
+        <button
+          v-else
+          class="completion-btn"
+          type="button"
+          @click="emit('markComplete')"
+        >
+          Mark as complete
+        </button>
+      </template>
+    </div>
   </main>
 
   <main class="content" v-else>
@@ -91,3 +158,61 @@ async function handleArticleClick(event: Event): Promise<void> {
     </div>
   </main>
 </template>
+
+<style scoped>
+.completion-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border, #2a2a2a);
+}
+
+.completion-btn {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--color-border, #2a2a2a);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text, #e8e8e8);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.completion-btn:hover {
+  background: var(--color-surface, #1a1a1a);
+  border-color: var(--color-text-muted, #888);
+}
+
+.completion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, #4ade80 15%, transparent);
+  color: #4ade80;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.completion-xp {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+.completion-btn--quiz {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-color: #facc15;
+  color: #facc15;
+}
+
+.completion-btn--quiz:hover {
+  background: color-mix(in srgb, #facc15 10%, transparent);
+  border-color: #facc15;
+}
+</style>

@@ -3,6 +3,48 @@ title: Variables, loops and conditionals
 description: High-level view of what this curriculum covers.
 category: Fundamentals
 order: 1
+xp: 50
+questions:
+  - id: q1
+    prompt: What does a variable do in a program?
+    options:
+      - Runs a block of code repeatedly
+      - Stores a named value for later use
+      - Compares two values and returns true or false
+      - Ends the program early
+    answer: 1
+  - id: q2
+    prompt: "What is the output of: let score = 0; score = score + 10; score = score + 5; console.log(score);"
+    options:
+      - "0"
+      - "10"
+      - "15"
+      - "5"
+    answer: 2
+  - id: q3
+    prompt: Which symbol is used to compare two values for equality in JavaScript?
+    options:
+      - "="
+      - "=="
+      - "==="
+      - ":="
+    answer: 2
+  - id: q4
+    prompt: What does the modulo operator (%) return?
+    options:
+      - The quotient after division
+      - The square root of a number
+      - The remainder after division
+      - The absolute value of a number
+    answer: 2
+  - id: q5
+    prompt: "What is the output of: for (let i = 1; i <= 3; i++) { console.log(i); }"
+    options:
+      - 0, 1, 2
+      - 1, 2, 3
+      - 1, 2, 3, 4
+      - 0, 1, 2, 3
+    answer: 1
 ---
 
 These three ideas show up in almost every program you will ever write:
