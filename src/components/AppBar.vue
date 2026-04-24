@@ -35,18 +35,24 @@ const router = useRouter();
 
     <div class="app-bar-right">
       <template v-if="user">
-        <img
-          v-if="user.user_metadata?.avatar_url"
-          class="app-bar-avatar"
-          :src="user.user_metadata.avatar_url"
-          :alt="user.user_metadata?.user_name ?? 'User avatar'"
-          width="28"
-          height="28"
-          referrerpolicy="no-referrer"
-        />
-        <span class="app-bar-username">{{
-          user.user_metadata?.user_name ?? user.email
-        }}</span>
+        <RouterLink
+          class="app-bar-profile-link"
+          to="/profile"
+          :title="`${user.user_metadata?.user_name ?? user.email}'s profile`"
+        >
+          <img
+            v-if="user.user_metadata?.avatar_url"
+            class="app-bar-avatar"
+            :src="user.user_metadata.avatar_url"
+            :alt="user.user_metadata?.user_name ?? 'User avatar'"
+            width="28"
+            height="28"
+            referrerpolicy="no-referrer"
+          />
+          <span class="app-bar-username">{{
+            user.user_metadata?.user_name ?? user.email
+          }}</span>
+        </RouterLink>
         <span class="app-bar-xp" title="Total XP earned">{{ totalXp }} XP</span>
         <button class="app-bar-login" type="button" @click="emit('signOut')">
           Log out
@@ -70,6 +76,20 @@ const router = useRouter();
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+
+.app-bar-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.4rem;
+  transition: background 120ms ease;
+}
+
+.app-bar-profile-link:hover {
+  background: var(--panel-hover, rgba(255, 255, 255, 0.06));
 }
 
 .app-bar-avatar {
