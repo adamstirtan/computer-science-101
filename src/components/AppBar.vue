@@ -13,7 +13,13 @@ const emit = defineEmits<{ toggle: [] }>();
         aria-label="Toggle navigation"
         @click="emit('toggle')"
       >
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 18 18"
+          fill="none"
+          aria-hidden="true"
+        >
           <rect y="2" width="18" height="2" rx="1" fill="currentColor" />
           <rect y="8" width="18" height="2" rx="1" fill="currentColor" />
           <rect y="14" width="18" height="2" rx="1" fill="currentColor" />
